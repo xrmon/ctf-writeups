@@ -24,7 +24,7 @@ registers accordingly and using the **int 0x21** instruction. We can read about 
 The first API interrupt in the file sets AH to 9, indicating “write string to stdout”.  This prints the string in DX, which is “Give me a flag to draw!” - so the weird arty text file above must be 
 the output of this program with the flag! Interestingly, strings in DOS are ‘$’-terminated instead of NULL terminated like we would normally expect.
 
-![Part of the entry function in radare](https://github.com/xrmon/ctf-writeups/2019/confidence-ctf/entry_function.png)
+![Part of the entry function in radare](https://raw.githubusercontent.com/xrmon/ctf-writeups/master/2019/confidence-ctf/entry_function.png)
 
 As we can see, there are three main functions called from this program. The first looks a horrific mess of basic blocks, which continues for several pages of scrolling through Radare’s graph view 
 (accessible when in a function by typing VV). The second is a simple for loop an array of size 0xA2, which was presumably produced from the horrific first function. There is a fake flag, “ 
@@ -33,7 +33,7 @@ p4{krule_ctf}” stored at address 0xBC.
 For each byte in the array, it uses the byte’s value as a position in the fake flag to produce a single character, which we store back in the array - this must be how the flag’s drawing was 
 produced! If the value in the array is greater than the length of the fake flag, we simply write a ‘^’ character. We don’t see this in flag.txt, so we know this didn’t happen.
 
-![The for loop converts values in the array to the characters from the fake flag](https://github.com/xrmon/ctf-writeups/2019/confidence-ctf/character_loop.png)
+![The for loop converts values in the array to the characters from the fake flag](https://raw.githubusercontent.com/xrmon/ctf-writeups/master/2019/confidence-ctf/character_loop.png)
 
 The third and final function is fairly boring, it simply adds newlines every 18 characters, giving 9 lines of output (0xA2 / 18 = 9). The only slightly interesting thing here was that since the 
 program exits by a call to the DOS API, there is no ret instruction in the entry function, meaning radare tried to analyse this third function as part of the entry function (since it was the next 
@@ -103,7 +103,7 @@ the task of finding a path through the grid from S to E, which increments each p
 for smallish problems like this I like to sit down and have a go by hand since it’s often quicker than finding and developing the algorithm for it.
 
 A while later sat drawing and redrawing solutions on a whiteboard, I came up with a solution which worked:
-![Solution showing a path through the grid which increments each position the required number of times](https://github.com/xrmon/ctf-writeups/2019/confidence-ctf/first_solution.png)
+![Solution showing a path through the grid which increments each position the required number of times](https://raw.githubusercontent.com/xrmon/ctf-writeups/master/2019/confidence-ctf/first_solution.png)
 
 Writing out this solution in terms of bits, converting to hex and remembering to reverse the bits in each byte so they are processed in the right order, this gave us the following solution:
 057a1697667316327d
@@ -118,7 +118,7 @@ rejected by the program. However, these are a necessary part of the solution. It
 This actually makes the problem significantly easier, since we are given part of the route already and must simply find the rest of it (remember, each pair of bits in the solution gives us a move 
 left/right, and a move up/down, meaning every move is diagonal unless we are at the edge of the array).  With the new fixed parts of the route that we have discovered marked in red, and arrows I 
 added marked in green, this now gives us:
-![New solution with certain required paths derived from the flag format](https://github.com/xrmon/ctf-writeups/2019/confidence-ctf/second_solution.png)
+![New solution with certain required paths derived from the flag format](https://raw.githubusercontent.com/xrmon/ctf-writeups/master/2019/confidence-ctf/second_solution.png)
 
 Converted to hex, we now get, 70347b61716932667d, which when decoded gives us p4{aqi2f}, which is the actual flag for the challenge.
 

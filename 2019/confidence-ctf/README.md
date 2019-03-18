@@ -89,10 +89,10 @@ def second_thing(byte, pos):
     bit = second_bit(byte)
     if bit == 1 and not at edge of array:
         # Move down (each row is length 18)
-        pos -= 18
+        pos += 18
     elif bit == 0 and not at edge of array:
         # Move up (each row is length 18)
-        pos += 18
+        pos -= 18
     else:
         # Keep position the same
     return pos

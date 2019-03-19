@@ -1,5 +1,7 @@
+This is a writeup from the HackBack inter-university CTF in the UK, produced by tryhackme: https://tryhackme.com/. This CTF was great fun, the challenges weren't too difficult but were challenging enough to get a sense of satisfaction when you solved them. I thought I'd do a writeup for one of the challenges that I solved 🎉.
+
 # Go to Hell, Diffie!
-#ctf
+
 In this challenge, we are told that Andrew wants to send a secure message by securely sharing a key and encrypting the message with AES-CBC (cipher-block-chaining):
 
 -----------------------------

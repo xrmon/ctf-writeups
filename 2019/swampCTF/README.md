@@ -55,7 +55,9 @@ Now we just have to do this.
 We xor both plaintext blocks for each key and recover the three IVs:
 
 IV1: flag{w0w_wh4t_l4
+
 IV2: zy_k3yz_much_w34
+
 IV3: k_crypt0_f41ls!}
 
 And get the flag:

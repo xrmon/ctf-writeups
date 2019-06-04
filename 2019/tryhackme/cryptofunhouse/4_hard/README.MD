@@ -11,7 +11,7 @@ go run one.go
 
 This will download & run the AES implementation at https://github.com/xrmon/aes.
 
-The book used in the challenge was *The Economy of Machinery and Manufactures*, by Charles Babbage (available in three parts [here](http://historyofeconomicthought.mcmaster.ca/babbage/index.html)). All punctuation and numbers were removed to make the challenge easier, and all letters were converted to lower case. The book is otherwise unaltered.
+The book used in the challenge was *The Economy of Machinery and Manufactures*, by Charles Babbage (available in three parts [here](http://historyofeconomicthought.mcmaster.ca/babbage/index.html)). To make the challenge easier all punctuation and numbers were removed, roman numerals were converted to text, and letters were converted to lower case. The book is otherwise unaltered.
 
 ###Question 1
 
@@ -26,14 +26,14 @@ The key point is that in Rijndael, the MixColumns step it not applied on the fin
 
 If you've forgotten how any of these three operations work, have a quick read [here](https://en.wikipedia.org/wiki/Advanced_Encryption_Standard).
 
-Notice in the SubBytes operation, the input value of one byte of the state has no impact on the output value of any other byte. In addtion, the position of that byte in the state has no impact on its output value. As such, the ShiftRows and SubBytes operations can be swapped (in maths terms, we say the operations **commute**). Therefore, the encryption process of AES-ONE is equivalent to:
+Notice in the SubBytes operation, the input value of one byte of the state has no impact on the output value of any other byte. In addition, the position of that byte in the state has no impact on its output value. As such, the ShiftRows and SubBytes operations can be swapped (in maths terms, we say the operations **commute**). Therefore, the encryption process of AES-ONE is equivalent to:
 
 * **AddRoundKey** with master key
 * ***ShiftRows***
 * ***SubBytes***
 * **AddRoundKey** with first round key
 
-Now, in the AddRoundKey step, once again, the value of any one byte has no impact on the value of any other byte during the operation (remember, each byte is xored with the corresponding byte of the key). This time, the byte's position in the array does have an impact, as each byte of the key will usually be different, so the ShiftRows operation is not commutative with AddRoundKey. However, we can swap the order of AddRoundKey and ShiftRows if we first apply ShiftRows to the master key. Thus, our encryption process is equivelent to:
+Now, in the AddRoundKey step, once again, the value of any one byte has no impact on the value of any other byte during the operation (remember, each byte is xored with the corresponding byte of the key). This time, the byte's position in the array does have an impact, as each byte of the key will usually be different, so the ShiftRows operation is not commutative with AddRoundKey. However, we can swap the order of AddRoundKey and ShiftRows if we first apply ShiftRows to the master key. Thus, our encryption process is equivalent to:
 
 - ***ShiftRows***
 - ***AddRoundKey*** with ***ShiftRows***(master key)
@@ -45,7 +45,7 @@ Since both the keys are fixed throughout all the ciphertexts in the challenge, w
 * **ShiftRows**
 * ***Unknown permutation***
 
-The cipher now looks vaguely similar. Remember how the subtitution cipher, covered in part 2, is essentially a permutation of the alphabet, where each letter of the alphabet is mapped to another letter of the alphabet:
+The cipher now looks vaguely similar. Remember how the substitution cipher, covered in part 2, is essentially a permutation of the alphabet, where each letter of the alphabet is mapped to another letter of the alphabet:
 
  A B C D E F G H I J K L M N O P Q R S T U V W X Y Z
 
@@ -91,7 +91,7 @@ E(x) ⊕ E(x') = s(x ⊕ k) ⊕ s(x' ⊕ k) ⊕ r ⊕ r
 
 E(x) ⊕ E(x') = s(x ⊕ k) ⊕ s(x' ⊕ k)
 
-The values of E(x), E(x'), x and x' are known through our two plaintext-ciphertext pairs. The unknown key value k appears in both instances of the sbox, meaning we can't rearrange the equation in terms of k like we did back in school. However, there are only 256 possible values of the key, meaning we can brute force the value of k and find the value which satsifies the equation.
+The values of E(x), E(x'), x and x' are known through our two plaintext-ciphertext pairs. The unknown key value k appears in both instances of the sbox, meaning we can't rearrange the equation in terms of k like we did back in school. However, there are only 256 possible values of the key, meaning we can brute force the value of k and find the value which satisfies the equation.
 
 Unfortunately, when we try this, we don't get a unique value for each key byte. In fact, we end up with two possible values for each position (see code in question_2.py):
 
@@ -136,6 +136,6 @@ E(Xi) = s(Xi ⊕ Ki) ⊕ Ri,  *and*
 
 E(Xi') = S(Xi' ⊕ Ki) ⊕ Ri,  *for 0 <= i < 16*.
 
-Thus we have 32 equations that the master key must satisfy.  Since there are two possibilities for each of the 16 positions, there are 16 possible keys to check. Through the Rijndael key schedule, the first round key is derived from the master key (although each byte of the round key can depend on several bytes of the master key, so we must now brute force the entire 16-byte master key, rather than individual bytes). The values of the round keys follow a recurrance relationship starting from the master key, implemented in question_2.py as the function *getRoundKey*. The Rijndael key schedule is described in detail [here](https://en.wikipedia.org/wiki/Rijndael_key_schedule).
+Thus we have 32 equations that the master key must satisfy.  Since there are two possibilities for each of the 16 positions, there are 16 possible keys to check. Through the Rijndael key schedule, the first round key is derived from the master key (although each byte of the round key can depend on several bytes of the master key, so we must now brute force the entire 16-byte master key, rather than individual bytes). The values of the round keys follow a recurrence relationship starting from the master key, implemented in question_2.py as the function *getRoundKey*. The Rijndael key schedule is described in detail [here](https://en.wikipedia.org/wiki/Rijndael_key_schedule).
 
 The Python solution script can easily brute force these possibilities and deduce that the key is *4e30745f73302d346456616e43336421*, or "N0t_s0-4dVanC3d!" as text.

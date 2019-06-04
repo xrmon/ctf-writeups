@@ -11,3 +11,5 @@ Python solutions for all questions are provided in the respective folders.
 ### Section 4
 
 Python solutions, along with a full and detailed writeup, are provided in this folder.
+
+Go program used to produce the challenge is also provided under *4_hard/go_program*.

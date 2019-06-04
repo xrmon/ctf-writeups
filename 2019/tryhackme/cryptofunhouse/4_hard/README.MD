@@ -1,10 +1,19 @@
 # CryptoFunHouse CTF-style challenges
 
-###Question 1
-
 Both of these challenges are rather difficult. Don't be disheartened if you have to use the sample plaintext or part of this writeup to solve them.
 
-Usually, the rijndael cipher (AES) is iterated over several rounds to ensure a secure encryption: for AES with a 128-bit key, 10 rounds are necessary. It comes as no surprise that when only a single round is used, the cipher is very weak.
+If you're interested, the program used to create the challenge can be found under the *go_program* directory. Assuming you have Go installed, you can run it with:
+
+```
+go get https://github.com/xrmon/aes
+go run one.go
+```
+
+This will download & run the AES implementation at https://github.com/xrmon/aes.
+
+###Question 1
+
+Usually, the Rijndael cipher (AES) is iterated over several rounds to ensure a secure encryption: for AES with a 128-bit key, 10 rounds are necessary. It comes as no surprise that when only a single round is used, the cipher is very weak.
 
 The key point is that in Rijndael, the MixColumns step it not applied on the final round. With only one round, the MixColumns operation never happens. We must also remember that an additional AddRoundKey operation is applied with the master key before the rest of the algorithm. As such, the encryption process for AES-ONE looks like this:
 
@@ -32,7 +41,7 @@ Now, in the AddRoundKey step, once again, the value of any one byte has no impac
 Since both the keys are fixed throughout all the ciphertexts in the challenge, we can model the AddRoundKey, SubBytes and AddRoundKey steps as some unknown permutation that maps every byte onto some other byte. This permutation will be different for each of the 16 positions of the state. The encryption process is now fairly simple:
 
 * **ShiftRows**
-* ***Unknown permutation*** 
+* ***Unknown permutation***
 
 The cipher now looks vaguely similar. Remember how the subtitution cipher, covered in part 2, is essentially a permutation of the alphabet, where each letter of the alphabet is mapped to another letter of the alphabet:
 
@@ -128,4 +137,3 @@ E(Xi') = S(Xi' ⊕ Ki) ⊕ Ri,  *for 0 <= i < 16*.
 Thus we have 32 equations that the master key must satisfy.  Since there are two possibilities for each of the 16 positions, there are 16 possible keys to check. Through the Rijndael key schedule, the first round key is derived from the master key (although each byte of the round key can depend on several bytes of the master key, so we must now brute force the entire 16-byte master key, rather than individual bytes). The values of the round keys follow a recurrance relationship starting from the master key, implemented in question_2.py as the function *getRoundKey*. The Rijndael key schedule is described in detail [here](https://en.wikipedia.org/wiki/Rijndael_key_schedule).
 
 The Python solution script can easily brute force these possibilities and deduce that the key is *4e30745f73302d346456616e43336421*, or "N0t_s0-4dVanC3d!" as text.
-

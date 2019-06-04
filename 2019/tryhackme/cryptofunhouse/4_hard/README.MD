@@ -13,7 +13,7 @@ This will download & run the AES implementation at https://github.com/xrmon/aes.
 
 The book used in the challenge was *The Economy of Machinery and Manufactures*, by Charles Babbage (available in three parts [here](http://historyofeconomicthought.mcmaster.ca/babbage/index.html)). To make the challenge easier all punctuation and numbers were removed, roman numerals were converted to text, and letters were converted to lower case. The book is otherwise unaltered.
 
-###Question 1
+### Question 1
 
 Usually, the Rijndael cipher (AES) is iterated over several rounds to ensure a secure encryption: for AES with a 128-bit key, 10 rounds are necessary. It comes as no surprise that when only a single round is used, the cipher is very weak.
 

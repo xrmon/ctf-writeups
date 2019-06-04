@@ -2,17 +2,6 @@
 
 Both of these challenges are rather difficult. Don't be disheartened if you have to use the sample plaintext or part of this writeup to solve them.
 
-If you're interested, the program used to create the challenge can be found under the *go_program* directory. Assuming you have Go installed, you can run it with:
-
-```
-go get https://github.com/xrmon/aes
-go run one.go
-```
-
-This will download & run the AES implementation at https://github.com/xrmon/aes.
-
-The book used in the challenge was *The Economy of Machinery and Manufactures*, by Charles Babbage (available in three parts [here](http://historyofeconomicthought.mcmaster.ca/babbage/index.html)). To make the challenge easier all punctuation and numbers were removed, roman numerals were converted to text, and letters were converted to lower case. The book is otherwise unaltered.
-
 ### Question 1
 
 Usually, the Rijndael cipher (AES) is iterated over several rounds to ensure a secure encryption: for AES with a 128-bit key, 10 rounds are necessary. It comes as no surprise that when only a single round is used, the cipher is very weak.
@@ -139,3 +128,16 @@ E(Xi') = S(Xi' ⊕ Ki) ⊕ Ri,  *for 0 <= i < 16*.
 Thus we have 32 equations that the master key must satisfy.  Since there are two possibilities for each of the 16 positions, there are 16 possible keys to check. Through the Rijndael key schedule, the first round key is derived from the master key (although each byte of the round key can depend on several bytes of the master key, so we must now brute force the entire 16-byte master key, rather than individual bytes). The values of the round keys follow a recurrence relationship starting from the master key, implemented in question_2.py as the function *getRoundKey*. The Rijndael key schedule is described in detail [here](https://en.wikipedia.org/wiki/Rijndael_key_schedule).
 
 The Python solution script can easily brute force these possibilities and deduce that the key is *4e30745f73302d346456616e43336421*, or "N0t_s0-4dVanC3d!" as text.
+
+### More Info
+
+If you're interested, the program used to create the challenge can be found under the *go_program* directory. Assuming you have Go installed, you can run it with:
+
+```
+go get https://github.com/xrmon/aes
+go run one.go
+```
+
+This will download & run the AES implementation at https://github.com/xrmon/aes.
+
+The book used in the challenge was *The Economy of Machinery and Manufactures*, by Charles Babbage (available in three parts [here](http://historyofeconomicthought.mcmaster.ca/babbage/index.html)). To make the challenge easier all punctuation and numbers were removed, roman numerals were converted to text, and letters were converted to lower case. The book is otherwise unaltered.
